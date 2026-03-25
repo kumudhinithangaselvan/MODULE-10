@@ -1,92 +1,88 @@
-# Ex.No:5
+# Ex.No:4
 
-# Ex.Name: Write A C++ Program for Topological Sorting (using vector and algorithm STLs)
+# Ex.Name: Write A C++ Graph implementation using STL for competitive programming | (DFS of Unweighted and Undirected)
+
 
 ## Date:
+
 ## Aim:
-To perform Topological Sorting of a directed acyclic graph (DAG) using vectors and STL algorithms in C++.
+To implement a Depth-First Search (DFS) traversal of an unweighted, undirected graph using STL vectors in C++ for competitive programming.
 
 ## Algorithm:
 STEP 1: Start the program.
 
-STEP 2: Represent the DAG as a list of edges or pairs, where pair(a,b) means an edge from a → b.
+STEP 2: Define a graph using vector<int> adj[n] for adjacency lists.
 
-STEP 3: Define a pair structure to store edges and a comparator to sort them in topological order.
+STEP 3: Define a boolean vector visited[n] to track visited vertices.
 
-STEP 4: Use vector<pair> to store all edges.
+STEP 4: Define a function addEdge(vector<int> adj[], int u, int v) to add an edge:
 
-STEP 5: Sort the vector using std::sort and the custom comparator.
+adj[u].push_back(v)
 
-STEP 6: In the comparator, ensure that a < b or b < a is used to determine the topological order.
+adj[v].push_back(u) (undirected graph)
 
-STEP 7: Iterate through the sorted vector and print each edge or vertex in order.
+STEP 5: Define a recursive DFS function DFS(vector<int> adj[], int v, vector<bool> &vis) that:
 
-STEP 8: End the program.
+Marks v as visited: vis[v] = true
+
+Prints vertex v
+
+Recursively visits all unvisited neighbors of v
+
+STEP 6: In main(), read number of vertices n.
+
+STEP 7: Initialize adjacency list adj[n] and visited[n].
+
+STEP 8: Read edges (pairs of vertices) and call addEdge() for each edge.
+
+STEP 9: Call DFS(adj, start_vertex, visited) to perform DFS from a starting vertex.
+
+STEP 10: End the program.
 
 
 
 
 ## Program:
 ```
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-struct pair 
+#include <bits/stdc++.h>
+using namespace std;
+void addEdge(vector<int> adj[], int u, int v)
 {
-	int a, b;
-	pair(int a, int b) : a(a), b(b) {}
-	
-	std::ostream &print(std::ostream &out) const 
-	{
-		return (out << "(" << a << ", " << b << ")");
-	}
-};
-
-std::ostream &operator<<(std::ostream &out, const pair &p) 
-{ 
-    return p.print(out); 
-    
+    adj[u].push_back(v);
 }
 
-struct topological_pair_comparator 
+void DFS(vector<int> adj[], int v, vector<bool> &vis)
 {
-	bool operator()(const pair &p, const pair &q) const 
-	{ 
-	    return p.a<q.a && p.b<q.b; 
-	    
-	}
-} tpc;
+    vis[v] = true;
+    cout<<v<<" ";
+    for(auto i :adj[v])
+    {
+        if(vis[i] == false)
+        {
+            DFS(adj, i , vis);
+        }
+    }
+}
 
-std::vector<pair> pairs = 
-{
-     pair(1,1),
-    pair(1,2),
-	pair(2,1),
-	pair(3,1),
-	pair(1,3),
-	pair(5,5),
-	pair(2,2),
-	pair(4,0)
-
-//write code here
-};
-
-int main() {
-	std::sort(pairs.begin(), pairs.end(), tpc);
-	for(const pair &p : pairs) std::cout << p << " ";
-	std::cout << std::endl;
-	return 0;
+int main()
+{ 
+    int n ,a,b;
+    cin>>n;
+    vector<int>adj[n];
+    vector<bool>visited(n,false);
+    for(int i = 0 ;i < n ;i++)
+    {
+        cin>>a>>b;
+        addEdge(adj,a,b);
+    }
+    DFS(adj, 1, visited);
 }
 ```
 
 
-
 ## Output:
-<img width="1169" height="280" alt="{AE696ACC-9899-4653-A9D4-3323BE8F12B4}" src="https://github.com/user-attachments/assets/576ebc75-d556-47db-a269-397888d3e275" />
-
-
+<img width="702" height="768" alt="{04906B18-C388-477F-8DB7-8A502E93BF3D}" src="https://github.com/user-attachments/assets/bf5a908e-fc59-49c6-981d-e9260187271e" />
 
 ## Result:
-The program sorts the vertices (or edges) of a DAG in topological order.
+The program prints the DFS traversal of an unweighted, undirected graph.
 
